@@ -30,6 +30,7 @@ public class FundamentosApplication implements CommandLineRunner {
 	private final UserPojo userPojo;
 	private UserRepository userRepository;
 
+
 	//take care about write from where class you want to inject the implementation
 	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependecy myBeanWithDependecy, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository){
 		this.componentDependency = componentDependency;
@@ -46,8 +47,16 @@ public class FundamentosApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		saveUsersIntoDataBase();
 //		previewExamples();
+//		saveUsersIntoDataBase();
+		GetDataJpqlFromUser("jhon@mail.com");
+	}
+
+	private void GetDataJpqlFromUser(String email){
+		LOGGER.info("User by User email: " +
+				userRepository.findByUserEmail(email)
+				.orElseThrow(()->new RuntimeException("There is not a user with email: " + email)));
+
 	}
 
 	private void saveUsersIntoDataBase(){
@@ -63,7 +72,7 @@ public class FundamentosApplication implements CommandLineRunner {
 		List<User> list = Arrays.asList(user1,user2,user3,user4,user5,user6,user7,user8,user9);
 //		also i can use
 //		userRepository.saveAll(list);
-		list.stream().forEach(userRepository::save);
+		list.forEach(userRepository::save);
 	}
 
 	private void previewExamples(){
