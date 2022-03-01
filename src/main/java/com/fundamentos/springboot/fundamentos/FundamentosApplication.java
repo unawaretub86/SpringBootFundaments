@@ -48,8 +48,8 @@ public class FundamentosApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 //		previewExamples();
-//		saveUsersIntoDataBase();
-		GetDataJpqlFromUser("jhon@mail.com");
+		saveUsersIntoDataBase();
+		GetDataJpqlFromUser("user4@mail.com");
 	}
 
 	private void GetDataJpqlFromUser(String email){
