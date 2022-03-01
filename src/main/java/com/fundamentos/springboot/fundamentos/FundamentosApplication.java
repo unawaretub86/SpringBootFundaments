@@ -4,7 +4,9 @@ import com.fundamentos.springboot.fundamentos.bean.MyBean;
 import com.fundamentos.springboot.fundamentos.bean.MyBeanWithDependecy;
 import com.fundamentos.springboot.fundamentos.bean.MyBeanWithProperties;
 import com.fundamentos.springboot.fundamentos.component.ComponentDependency;
+import com.fundamentos.springboot.fundamentos.entity.User;
 import com.fundamentos.springboot.fundamentos.pojo.UserPojo;
+import com.fundamentos.springboot.fundamentos.repository.UserRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,7 +14,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 public class FundamentosApplication implements CommandLineRunner {
@@ -24,14 +28,16 @@ public class FundamentosApplication implements CommandLineRunner {
 	private final MyBeanWithDependecy myBeanWithDependecy;
 	private final MyBeanWithProperties myBeanWithProperties;
 	private final UserPojo userPojo;
+	private UserRepository userRepository;
 
 	//take care about write from where class you want to inject the implementation
-	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependecy myBeanWithDependecy, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo){
+	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependecy myBeanWithDependecy, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository){
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependecy = myBeanWithDependecy;
 		this.myBeanWithProperties = myBeanWithProperties ;
 		this.userPojo = userPojo;
+		this.userRepository = userRepository;
 	}
 
 	public static void main(String[] args) {
@@ -40,6 +46,27 @@ public class FundamentosApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		saveUsersIntoDataBase();
+//		previewExamples();
+	}
+
+	private void saveUsersIntoDataBase(){
+		User user1 = new User("Jhon", "Jhon@mail.com", LocalDate.of(2022, 2, 28));
+		User user2 = new User("Maria", "Maria@mail.com", LocalDate.of(2022, 3, 26));
+		User user3 = new User("Juana", "Juana@mail.com", LocalDate.of(2020, 5, 27));
+		User user4 = new User("user4", "user4@mail.com", LocalDate.of(2016, 1, 1));
+		User user5 = new User("user5", "user5@mail.com", LocalDate.of(2020, 10, 15));
+		User user6 = new User("user6", "user6@mail.com", LocalDate.of(2021, 10, 2));
+		User user7 = new User("user7", "user7@mail.com", LocalDate.of(2015, 10, 22));
+		User user8 = new User("user8", "user8@mail.com", LocalDate.of(2019, 10, 30));
+		User user9 = new User("user9", "user9@mail.com", LocalDate.of(2020, 10, 9));
+		List<User> list = Arrays.asList(user1,user2,user3,user4,user5,user6,user7,user8,user9);
+//		also i can use
+//		userRepository.saveAll(list);
+		list.stream().forEach(userRepository::save);
+	}
+
+	private void previewExamples(){
 		componentDependency.saludar();
 		myBean.print();
 		myBeanWithDependecy.printWithDependecy();
@@ -50,7 +77,7 @@ public class FundamentosApplication implements CommandLineRunner {
 			int value = 10/0;
 			LOGGER.debug("My value is: " + value);
 		}catch (Exception e){
-		LOGGER.error("this is an error of divide by 0: " + e.getMessage());
+			LOGGER.error("this is an error of divide by 0: " + e.getMessage());
 		}
 	}
 }
