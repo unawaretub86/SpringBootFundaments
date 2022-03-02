@@ -62,10 +62,20 @@ public class FundamentosApplication implements CommandLineRunner {
 				.stream()
 				.forEach(user -> LOGGER.info("User with method sort: " + user));
 
+		userRepository.findByName("Jhon")
+				.stream()
+				.forEach(user -> LOGGER.info("User with query method: " + user));
+
+		LOGGER.info("User by Name and Email by query method: " +
+		userRepository.findByNameAndEmail("Maria", "Maria@mail.com" )
+				.orElseThrow(()->new RuntimeException("There is not a user with this email and name")));
+
 	}
 
 	private void saveUsersIntoDataBase(){
 		User user1 = new User("Jhon", "Jhon@mail.com", LocalDate.of(2022, 2, 28));
+		User user11 = new User("Jhon", "Jhon1@mail.com", LocalDate.of(2022, 2, 28));
+		User user12 = new User("Jhon", "Jhon2@mail.com", LocalDate.of(2022, 2, 28));
 		User user2 = new User("Maria", "Maria@mail.com", LocalDate.of(2022, 3, 26));
 		User user3 = new User("Juana", "Juana@mail.com", LocalDate.of(2020, 5, 27));
 		User user4 = new User("user4", "user4@mail.com", LocalDate.of(2016, 1, 1));
@@ -74,7 +84,7 @@ public class FundamentosApplication implements CommandLineRunner {
 		User user7 = new User("user7", "user7@mail.com", LocalDate.of(2015, 10, 22));
 		User user8 = new User("user8", "user8@mail.com", LocalDate.of(2019, 10, 30));
 		User user9 = new User("user9", "user9@mail.com", LocalDate.of(2020, 10, 9));
-		List<User> list = Arrays.asList(user1,user2,user3,user4,user5,user6,user7,user8,user9);
+		List<User> list = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9, user11, user12);
 //		also i can use
 //		userRepository.saveAll(list);
 		list.forEach(userRepository::save);
