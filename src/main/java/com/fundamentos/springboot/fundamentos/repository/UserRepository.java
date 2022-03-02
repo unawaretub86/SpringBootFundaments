@@ -22,4 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 //    lo usamos optional para el manejo de los null
     Optional<User> findByNameAndEmail(String name, String email);
+
+    List<User> findByNameLike(String name);
 }

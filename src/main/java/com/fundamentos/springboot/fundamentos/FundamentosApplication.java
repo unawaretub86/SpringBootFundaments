@@ -70,6 +70,10 @@ public class FundamentosApplication implements CommandLineRunner {
 		userRepository.findByNameAndEmail("Maria", "Maria@mail.com" )
 				.orElseThrow(()->new RuntimeException("There is not a user with this email and name")));
 
+		userRepository.findByNameLike("%user%")
+				.stream()
+				.forEach(user -> LOGGER.info("User found by Like :" + user));
+
 	}
 
 	private void saveUsersIntoDataBase(){
