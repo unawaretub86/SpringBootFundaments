@@ -50,30 +50,50 @@ public class FundamentosApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 //		previewExamples();
 		saveUsersIntoDataBase();
-		GetDataJpqlFromUser("user9@mail.com");
+		GetDataJpqlFromUser();
 	}
 
-	private void GetDataJpqlFromUser(String email){
-		LOGGER.info("User by User email: " +
-				userRepository.findByUserEmail(email)
-				.orElseThrow(()->new RuntimeException("There is not a user with email: " + email)));
+	private void GetDataJpqlFromUser(){
+//		LOGGER.info("User by User email: " +
+//				userRepository.findByUserEmail(email)
+//				.orElseThrow(()->new RuntimeException("There is not a user with email: " + email)));
+//
+//		userRepository.findAndSort("user", Sort.by("id").ascending())
+//				.stream()
+//				.forEach(user -> LOGGER.info("User with method sort: " + user));
+//
+//		userRepository.findByName("Jhon")
+//				.stream()
+//				.forEach(user -> LOGGER.info("User with query method: " + user));
+//
+//		LOGGER.info("User by Name and Email by query method: " +
+//		userRepository.findByNameAndEmail("Maria", "Maria@mail.com" )
+//				.orElseThrow(()->new RuntimeException("There is not a user with this email and name")));
+//
+//		userRepository.findByNameLike("%J%")
+//				.stream()
+//				.forEach(user -> LOGGER.info("User found by Like :" + user));
+//
+//		userRepository.findByNameOrEmail("user6", null)
+//					.stream()
+//						.forEach(user -> LOGGER.info("User found by email or Name: "+ user));
+//
+//		userRepository
+//				.findByBirthDateBetween(LocalDate.of(2018, 1, 1), LocalDate.of(2021, 5,2))
+//					.stream()
+//						.forEach(user -> LOGGER.info("User found by BirthDate: " + user));
+//
+//		userRepository
+//				.findByNameLikeOrderByIdDesc("%user%")
+//						.stream()
+//								.forEach(user -> LOGGER.info("Users found By Like And ordered: " + user));
 
-		userRepository.findAndSort("user", Sort.by("id").ascending())
-				.stream()
-				.forEach(user -> LOGGER.info("User with method sort: " + user));
+		userRepository
+				.findByNameContainingOrderByIdAsc("user")
+						.stream()
+								.forEach(user -> LOGGER.info("Users found By Containing And ordered: " + user));
 
-		userRepository.findByName("Jhon")
-				.stream()
-				.forEach(user -> LOGGER.info("User with query method: " + user));
-
-		LOGGER.info("User by Name and Email by query method: " +
-		userRepository.findByNameAndEmail("Maria", "Maria@mail.com" )
-				.orElseThrow(()->new RuntimeException("There is not a user with this email and name")));
-
-		userRepository.findByNameLike("%user%")
-				.stream()
-				.forEach(user -> LOGGER.info("User found by Like :" + user));
-
+		System.out.println("all here is working");
 	}
 
 	private void saveUsersIntoDataBase(){
