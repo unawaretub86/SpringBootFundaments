@@ -56,18 +56,20 @@ public class FundamentosApplication implements CommandLineRunner {
 	private void GetDataJpqlFromUser(){
 //		LOGGER.info("User by User email: " +
 //				userRepository.findByUserEmail(email)
-//				.orElseThrow(()->new RuntimeException("There is not a user with email: " + email)));
+//					.orElseThrow(()->new RuntimeException("There is not a user with email: " + email)));
 //
-//		userRepository.findAndSort("user", Sort.by("id").ascending())
-//				.stream()
-//				.forEach(user -> LOGGER.info("User with method sort: " + user));
+//		userRepository
+//				.findAndSort("user", Sort.by("id").ascending())
+//					.stream()
+//						.forEach(user -> LOGGER.info("User with method sort: " + user));
 //
-//		userRepository.findByName("Jhon")
-//				.stream()
-//				.forEach(user -> LOGGER.info("User with query method: " + user));
+//		userRepository
+//				.findByName("Jhon")
+//					.stream()
+//						.forEach(user -> LOGGER.info("User with query method: " + user));
 //
 //		LOGGER.info("User by Name and Email by query method: " +
-//		userRepository.findByNameAndEmail("Maria", "Maria@mail.com" )
+//			userRepository.findByNameAndEmail("Maria", "Maria@mail.com" )
 //				.orElseThrow(()->new RuntimeException("There is not a user with this email and name")));
 //
 //		userRepository.findByNameLike("%J%")
@@ -87,11 +89,16 @@ public class FundamentosApplication implements CommandLineRunner {
 //				.findByNameLikeOrderByIdDesc("%user%")
 //						.stream()
 //								.forEach(user -> LOGGER.info("Users found By Like And ordered: " + user));
+//
+//		userRepository
+//				.findByNameContainingOrderByIdAsc("user")
+//						.stream()
+//								.forEach(user -> LOGGER.info("Users found By Containing And ordered: " + user));
 
-		userRepository
-				.findByNameContainingOrderByIdAsc("user")
-						.stream()
-								.forEach(user -> LOGGER.info("Users found By Containing And ordered: " + user));
+		LOGGER.info("User found By named parameter" +
+				userRepository
+					.getAllByBithDateAndEmail(LocalDate.of(2022, 2, 28), "Jhon@mail.com")
+						.orElseThrow(()-> new RuntimeException("The user was not found :( ")));
 
 		System.out.println("all here is working");
 	}
