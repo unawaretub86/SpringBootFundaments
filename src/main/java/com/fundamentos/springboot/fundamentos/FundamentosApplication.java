@@ -7,6 +7,7 @@ import com.fundamentos.springboot.fundamentos.component.ComponentDependency;
 import com.fundamentos.springboot.fundamentos.entity.User;
 import com.fundamentos.springboot.fundamentos.pojo.UserPojo;
 import com.fundamentos.springboot.fundamentos.repository.UserRepository;
+import com.fundamentos.springboot.fundamentos.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,17 +30,28 @@ public class FundamentosApplication implements CommandLineRunner {
 	private final MyBeanWithDependecy myBeanWithDependecy;
 	private final MyBeanWithProperties myBeanWithProperties;
 	private final UserPojo userPojo;
-	private UserRepository userRepository;
+	private final UserRepository userRepository;
+	private final UserService userService;
 
 
 	//take care about write from where class you want to inject the implementation
-	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependecy myBeanWithDependecy, MyBeanWithProperties myBeanWithProperties, UserPojo userPojo, UserRepository userRepository){
+	public FundamentosApplication
+	(@Qualifier("componentTwoImplement")
+	 ComponentDependency componentDependency,
+	 MyBean myBean,
+	 MyBeanWithDependecy myBeanWithDependecy,
+	 MyBeanWithProperties myBeanWithProperties,
+	 UserPojo userPojo,
+	 UserRepository userRepository,
+	 UserService userService){
+
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependecy = myBeanWithDependecy;
 		this.myBeanWithProperties = myBeanWithProperties ;
 		this.userPojo = userPojo;
 		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 
 	public static void main(String[] args) {
@@ -51,7 +63,30 @@ public class FundamentosApplication implements CommandLineRunner {
 //		previewExamples();
 		saveUsersIntoDataBase();
 		GetDataJpqlFromUser();
+		saveWithErrorTransactional();
 	}
+
+	private void saveWithErrorTransactional() {
+		User test1 = new User("TestTransactional1", "TestTransactional1@mail.com", LocalDate.now());
+		User test2 = new User("TestTransactional2", "TestTransactional2mail.com", LocalDate.now());
+		User test3 = new User("TestTransactional3", "TestTransactional3@mail.com", LocalDate.now());
+		User test4 = new User("TestTransactional4", "TestTransactional1@mail.com", LocalDate.now());
+		User test5 = new User("TestTransactional5", "TestTransactional5@mail.com", LocalDate.now());
+
+		List<User> users = Arrays.asList(test1, test2, test3, test4, test5);
+
+		try {
+			userService.saveTransactional(users);
+		}catch (Exception e){
+			LOGGER.error(e + " Error into Transactional method");
+		}
+
+		userService.getAllUsers()
+				.stream()
+				.peek(user -> LOGGER.info("User inserted: " + user))
+				.forEach(user ->
+						LOGGER.info("This is the user inside Transactional method: " + user));
+;	}
 
 	private void GetDataJpqlFromUser(){
 //		LOGGER.info("User by User email: " +
