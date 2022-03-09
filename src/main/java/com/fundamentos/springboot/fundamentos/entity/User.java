@@ -39,4 +39,8 @@ public class User {
         this.email = email;
         this.birthDate = birthDate;
     }
+
+    public User(long id) {
+        this.id = id;
+    }
 }
