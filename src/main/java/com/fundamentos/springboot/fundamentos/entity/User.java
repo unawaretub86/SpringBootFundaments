@@ -1,5 +1,6 @@
 package com.fundamentos.springboot.fundamentos.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +29,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     //anotacion para evitar error en rest
-    @JsonManagedReference
+//    @JsonManagedReference
+    @JsonBackReference
     private List<Post> post = new ArrayList<>();
 
     public User() {
